@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.AuthoritymanageMapper">
+
+
+
+
+
+	<select id="getAuthoritys" resultType="Authority">
+		SELECT a.*,f.functionName
+		FROM au_function f,au_authority a
+		WHERE f.id=a.functionId and
+		roleId=#{rid};
+	</select>
+	<select id="getIsHave" resultType="Authority">
+		SELECT * FROM `au_authority` WHERE roleId=#{rid} AND functionId=#{fid};
+	</select>
+	
+	<delete id="delAuthority">
+		delete from  `au_authority` where roleId=#{rid};
+	</delete>
+	
+	<insert id="addAuthority" parameterType="Authority">
+		insert into `au_authority`(`roleId`,`functionId`,`userTypeId`,`creationTime`,`createdBy`)
+		values(#{roleId},#{functionId},#{userTypeId},#{creationTime},#{createdBy});
+	</insert>
+</mapper>

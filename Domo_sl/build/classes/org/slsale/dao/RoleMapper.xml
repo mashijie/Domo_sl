@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.RoleMapper">
+	
+	<select id="getAllRole" resultType="Role">
+		select * from au_role;
+	</select>
+	<update id="updateRoleIsStart" parameterType="Role">
+		update au_role
+		set isStart=#{isStart}
+		where id=#{id};
+	</update>
+	<insert id="addRole" parameterType="Role">
+		INSERT INTO au_role(`roleCode`,`roleName`,`createDate`,`isStart`,`createdBy`)
+		VALUES(#{roleCode},#{roleName},#{createDate},#{isStart},#{createdBy});
+	</insert>
+	<delete id="delRole" parameterType="Role">
+		delete from au_role where id=#{id};
+	</delete>
+	
+	<update id="modifyRole" parameterType="Role">
+		update au_role 
+		set roleCode=#{roleCode},roleName=#{roleName}
+		where id=#{id};
+	</update>
+	
+</mapper>

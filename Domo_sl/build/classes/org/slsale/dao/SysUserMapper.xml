@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.SysUserMapper">
+	
+	<update id="logoutUser">
+		update au_user
+		set lastLoginTime=#{lastLoginTime}
+		where id=#{id};
+	</update>
+	
+	<select id="login" resultType="SysUser">
+		select * from au_user
+		where
+		loginCode=#{loginCode} and password=#{password}
+	</select>
+
+	<update id="updatePwd" parameterType="SysUser">
+		update au_user
+		set password=#{password2}
+		where id=#{id}
+	</update>
+	
+	<update id="updateSecodePwd" parameterType="SysUser">
+		update au_user
+		set password2=#{password2}
+		where id=#{id}
+	</update>
+	
+	<select id="getAllSysUser" resultType="SysUser">
+		select * from au_user 
+		<trim prefix="where" prefixOverrides="and | or" >
+			<if test="s_loginCode != null and s_loginCode!=''">
+				and loginCode like concat('%',#{s_loginCode},'%')
+			</if>
+			<if test="s_referCode != null and s_referCode!=''">
+				and referCode=#{s_referCode}
+			</if>
+			<if test="s_roleId!=null and s_roleId!=''">
+				and roleId=#{s_roleId}
+			</if>
+			<if test="s_isStart!=null and s_isStart!=''">
+				and isStart=#{s_isStart}
+			</if>
+		</trim>
+		<if test="page != null">
+			limit #{page},#{pageSize};
+		</if>
+	</select>
+	<!-- 注册 -->
+	<insert id="addUser" parameterType="SysUser">
+	INSERT INTO au_user(`roleId`,`roleName`,`userType`,`userTypeName`,
+		`loginCode`,`userName`,`sex`,`cardType`,`cardTypeName`,`idCard`,`birthday`,
+		`country`,`mobile`,`email`,`postCode`,`bankName`,`bankAccount`,
+		`accountHolder`,`referId`,`referCode`,`createTime`,`isStart`,`userAddress`,`password`,`password2`,`idCardPicPath`,`bankPicPath`)value(
+			#{roleId},#{roleName},#{userType},#{userTypeName},#{loginCode},#{userName},#{sex},#{cardType},
+			#{cardTypeName},#{idCard},#{birthday},#{country},#{mobile},#{email},#{postCode},#{bankName},#{bankAccount},
+			#{accountHolder},#{referId},#{referCode},#{createTime},#{isStart},#{userAddress},'000000','000000',#{idCardPicPath},#{bankPicPath});
+	</insert>
+	
+	<select id="getUserById" resultType="SysUser">
+		select * from au_user where id=#{id};
+	</select>
+	<update id="updateUser" parameterType="SysUser">
+		update au_user
+		<trim prefix="set" suffix="where id=#{id}">
+			roleId=#{roleId},roleName=#{roleName},userType=#{userType},userTypeName=#{userTypeName},
+			loginCode=#{loginCode},userName=#{userName},sex=#{sex},cardType=#{cardType},cardTypeName=#{cardTypeName},idCard=#{idCard},birthday=#{birthday},
+			country=#{country},mobile=#{mobile},email=#{email},postCode=#{postCode},bankName=#{bankName},bankAccount=#{bankAccount},
+			accountHolder=#{accountHolder},isStart=#{isStart},userAddress=#{userAddress},
+			idCardPicPath=#{idCardPicPath},bankPicPath=#{bankPicPath}
+		</trim>
+	</update>
+	<delete id="deleteUser">
+		delete from au_user
+		where id=#{id};
+	</delete>
+	
+	<select id="getUserByRoleId" resultType="SysUser">
+		select * from au_user
+		where roleId=#{roleId}
+		limit 0,1;
+	</select>
+</mapper>

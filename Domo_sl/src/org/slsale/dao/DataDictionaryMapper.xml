@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.DataDictionaryMapper">
+
+	<select id="getDataDictionaryByType" resultType="DataDictionary">
+		select * from
+		data_dictionary where typeCode=#{type};
+	</select>
+
+	<select id="getAllDataDictionary" resultType="DataDictionary">
+		SELECT * FROM
+		`data_dictionary`
+		GROUP BY `typeCode`
+	</select>
+
+	<insert id="addDicSub" parameterType="DataDictionary">
+		INSERT INTO
+		data_dictionary(`typeCode`,`typeName`,`valueId`,`valueName`)VALUE
+		(
+		#{typeCode},#{typeName},#{valueId},#{valueName}
+		);
+	</insert>
+
+	<select id="getMaxValueId" resultType="int">
+		SELECT MAX(valueId) FROM
+		data_dictionary WHERE typeCode=#{type};
+	</select>
+
+	<delete id="delMainDic" parameterType="DataDictionary">
+		DELETE FROM
+		`data_dictionary`
+		WHERE typeCode=#{typeCode};
+	</delete>
+
+	<delete id="delDic">
+		DELETE FROM `data_dictionary`
+		WHERE id=#{id};
+	</delete>
+
+	<select id="typeCodeIsexit" resultType="int">
+		SELECT count(*) FROM
+		`data_dictionary`
+		WHERE typeCode=#{typeCode} AND id !=#{id};
+	</select>
+
+	<update id="modifyDic" parameterType="DataDictionary">
+		update data_dictionary
+		set
+		valueName=#{valueName}
+		where id=#{id};
+	</update>
+
+	<update id="modifylDic">
+		update data_dictionary
+		SET typeCode=#{newTypeCode},typeName=#{newTypeName}
+		where typeCode=#{oldTypeCode} and typeName=#{oldTypeName};
+	</update>
+</mapper>

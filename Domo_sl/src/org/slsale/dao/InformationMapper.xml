@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.InformationMapper">
+	
+	<select id="getAllInformation" resultType="Information">
+		select * from information;
+	</select>
+	
+	<select id="getInformationById" resultType="Information">
+		select * from information where id=#{id};
+	</select>
+	
+	<select id="getInformationByPage" resultType="Information">
+		select * from information
+		<if test="downLoad !=null">
+			where typeId!=''
+		</if>
+		 limit #{page},#{pageSize};
+	</select>
+	
+	<insert id="addInformation" parameterType="Information">
+		INSERT INTO information(`title`,`content`,`state`,
+			`publisher`,`publishTime`,`typeId`,`typeName`,`fileName`,`filePath`,`fileSize`,`uploadTime`)
+		VALUES
+		(#{title},#{content},#{state},
+			#{publisher},#{publishTime},#{typeId},#{typeName},#{fileName},#{filePath},#{fileSize},#{uploadTime});	
+	</insert>
+	
+	<delete id="delInformationById">
+		DELETE FROM information
+		WHERE id=#{id};
+	</delete>
+	
+	<update id="modifyInfoState">
+		update information
+		set state=#{state}
+		where id=#{id};
+	</update>
+	
+	<update id="modifyInformation" parameterType="Information">
+		UPDATE information
+		set title=#{title},content=#{content},typeId=#{typeId},
+			typeName=#{typeName},fileName=#{fileName},filePath=#{filePath},
+			fileSize=#{fileSize},uploadTime=#{uploadTime}
+		where id=#{id};	
+	</update>
+	
+</mapper>

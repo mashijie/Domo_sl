@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.GoodsInfoMapper">
+
+	<select id="getAllGoodsInfo" resultType="GoodsInfo">
+		select * from
+		goods_info;
+	</select>
+	<update id="updateIsStart" parameterType="GoodsInfo">
+		UPDATE goods_info
+		SET
+		state=#{state}
+		WHERE id=#{id};
+	</update>
+	<!-- 分页技术 -->
+	<select id="getGoodsInfo" resultType="GoodsInfo">
+		select * from goods_info
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="s_goodsName != null and s_goodsName!=''">
+				and goodsName like concat('%',#{s_goodsName},'%')
+			</if>
+			<if test="s_state != null and s_state !=''">
+				and state=#{s_state}
+			</if>
+		</trim>
+		<if test="page != null">
+			limit #{page},#{pageSize};
+		</if>
+	</select>
+	<select id="getGoodsInfoById" resultType="GoodsInfo">
+		select * from
+		goods_info where id=#{id};
+	</select>
+	<insert id="addGoodsInfo" parameterType="GoodsInfo">
+		INSERT INTO
+		goods_info(`goodsSN`,`goodsName`,`goodsFormat`,
+		`marketPrice`,`realPrice`,`state`,
+		`note`,`num`,`unit`,`createTime`,`createdBy`)
+		VALUES(
+		#{goodsSN},#{goodsName},#{goodsFormat},
+		#{marketPrice},#{realPrice},#{state},
+		#{note},#{num},#{unit},#{createTime},#{createdBy}
+		);
+	</insert>
+
+	<delete id="delgoodsinfo">
+		delete from goods_info
+		where id=#{id};
+	</delete>
+
+	<update id="modifyGoodsInfo" parameterType="GoodsInfo">
+		UPDATE `goods_info`
+		<trim prefix="set" suffix="where id=#{id}">
+			goodsSN=#{goodsSN},
+			goodsName=#{goodsName},
+			goodsFormat=#{goodsFormat},
+			marketPrice=#{marketPrice},
+			realPrice=#{realPrice},
+			goodsName=#{goodsName},
+			state=#{state},
+			note=#{note},
+			num=#{num},
+			unit=#{unit},
+			lastUpdateTime=#{lastUpdateTime}
+		</trim>
+	</update>
+
+	<select id="isExitInPack" resultType="int">
+		SELECT count(*) FROM `goods_pack_affiliated`
+		WHERE goodsInfoId=#{id};
+	</select>
+	
+	<select id="goodsSNisexit" resultType="int">
+		SELECT count(*) FROM `goods_info`
+		WHERE goodsSN=#{goodsSN}
+	</select>
+</mapper>

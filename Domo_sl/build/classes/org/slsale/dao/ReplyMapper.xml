@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.ReplyMapper">
+
+	<select id="getReplyById" resultType="Reply">
+		select * from reply
+		where messageId=#{messageId}
+	</select>
+	<insert id="addReply" parameterType="Reply">
+		insert into Reply(`messageId`,`replyContent`,`createdBy`,`createTime`)
+		values(#{messageId},#{replyContent},#{createdBy},#{createTime});
+	</insert>
+	
+	<delete id="delReplyByMessageId">
+		delete from Reply
+		where messageId=#{messageId};
+	</delete>
+</mapper>

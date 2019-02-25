@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.GoodsPackMapper">
+	
+	
+	<select id="getGoodsPacks" resultType="GoodsPack">
+		select * from goods_pack
+		<trim prefix="where" prefixOverrides="and | or" >
+			<if test="s_goodsPackName != null and s_goodsPackName!= ''">
+				and goodsPackName like concat('%',#{s_goodsPackName},'%')
+			</if>
+			<if test="s_typeId != null and s_typeId !=''">
+				and typeId=#{s_typeId}
+			</if>
+			<if test="s_state != null and s_state !=''">
+				and state=#{s_state}
+			</if>
+		</trim>
+		<if test="page != null">
+			limit #{page},#{pageSize};
+		</if>
+	</select>
+	
+	<select id="getGoodsPackById" resultType="GoodsPack">
+		select * from goods_pack where id=#{id};
+	</select>
+	
+	<update id="saveModifyGoodsPack" parameterType="GoodsPack">
+		update goods_pack
+		<trim prefix="set" suffix="where id=#{id}">
+			goodsPackName=#{goodsPackName},
+			goodsPackCode=#{goodsPackCode},
+			typeId=#{typeId},
+			typeName=#{typeName},
+			totalPrice=#{totalPrice},
+			state=#{state},
+			note=#{note},
+			num=#{num},
+			lastUpdateTime=#{lastUpdateTime}
+		</trim>
+	</update>
+	
+	<insert id="addGoodsPack" parameterType="GoodsPack">
+		INSERT INTO goods_pack(`goodsPackName`,`goodsPackCode`,
+		`typeId`,`typeName`,`totalPrice`,`state`,`note`,
+		`num`,`createdBy`,`createTime`)VALUES(#{goodsPackName},#{goodsPackCode},#{typeId},#{typeName},#{totalPrice},#{state},#{note},#{num},#{createdBy},#{createTime})
+	</insert>
+	
+	<select id="goodsPackcodeIsExit" resultType="int">
+		select count(1) from goods_pack where goodsPackCode=#{goodsPackCode};
+	</select>
+	
+	<delete id="delGoodsPack">
+		delete from goods_pack
+		where id=#{delId};
+	</delete>
+</mapper>

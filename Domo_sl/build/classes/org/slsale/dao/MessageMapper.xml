@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.MessageMapper">
+	
+	<select id="getMessageByPage" resultType="Message">
+		select * from leave_message
+		limit #{page},#{pageSize};
+	</select>
+	
+	<select id="getAllMessage" resultType="Message">
+		select * from leave_message
+	</select>
+	
+	<select id="getMessageById" resultType="Message">
+		select * from leave_message where id=#{id};
+	</select>
+	
+	<update id="updateMessageStateById">
+		update leave_message
+		set state=1
+		where id=#{id};
+	</update>
+	
+	<delete id="delMessageStateById">
+		delete from leave_message
+		where id=#{id};
+	</delete>
+	
+	<insert id="addMessage" parameterType="Message">
+		insert into leave_message(`createdBy`,`messageCode`,
+			`messageTitle`,`messageContent`,`state`,`createTime`)
+		values(#{createdBy},#{messageCode},#{messageTitle},#{messageContent},#{state},#{createTime});
+	</insert>
+</mapper>

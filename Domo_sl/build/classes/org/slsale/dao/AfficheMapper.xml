@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.slsale.dao.AfficheMapper">
+	
+	<select id="getAllAffiche" resultType="Affiche">
+		select * from affiche;
+	</select>
+	
+	<select id="getAfficheById" resultType="Affiche">
+		select * from affiche where id=#{id};
+	</select>
+	
+	<select id="getAfficheByPage" resultType="Affiche">
+		select * from affiche limit #{page},#{pageSize};
+	</select>
+
+	<update id="updateAffiche" parameterType="Affiche">
+		UPDATE affiche
+	<trim prefix="set" suffix="where id=#{id}">
+		`code`=#{code},`title`=#{title},`content`=#{content}
+		<if test="startTime!=null and startTime!=''">
+			,`startTime`#{startTime}
+		</if>
+		<if test="endTime !=null and endTime !=''">
+			,`endTime`#{endTime}
+		</if>
+	</trim>
+	</update>
+	
+	<insert id="addAffiche" parameterType="Affiche">
+		INSERT INTO affiche(`code`,`title`,`content`,
+			`publisher`,`publishTime`,`startTime`,`endTime`)VALUES(
+			#{code},#{title},#{content},#{publisher},#{publishTime},#{startTime},#{endTime});
+	</insert>
+	
+	<delete id="delAffiche">
+		delete from affiche where id=#{id};
+	</delete>
+</mapper>
